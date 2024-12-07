@@ -1,7 +1,6 @@
 package dnk.controllers;
 
-import javax.validation.Valid;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +13,14 @@ import dnk.dtos.requests.RequestCreateAccountDTO;
 import dnk.services.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("${apiPrefix}/auth")
+@RequestMapping("${api.prefix}/auth")
 @Api(tags = "Authentication", description = "APIs for Authentication module")
 public class AuthController {
 
@@ -31,11 +32,17 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    @ApiOperation(value = "requestType : RequestDomain enum", notes = "Create User API")
-    public BaseResponse<String> createPositionAndSeat(
+    @ApiOperation(value = "", notes = "Create User API")
+    public ResponseEntity<BaseResponse<String>> createUser(
             @Valid @RequestBody RequestCreateAccountDTO requestDTO) {
-        authService.createUser(requestDTO);
-        return BaseResponse.ok(AppConstants.STATUS_201, AppConstants.MESSAGE_201);
+        try {
+            authService.createUser(requestDTO);
+            return ResponseEntity
+                    .ok(BaseResponse.ok(AppConstants.STATUS_201, AppConstants.MESSAGE_201));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError()
+                    .body(BaseResponse.error(AppConstants.STATUS_500, ex.getMessage()));
+        }
     }
 
 }

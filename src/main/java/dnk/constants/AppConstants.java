@@ -16,6 +16,9 @@ public class AppConstants {
                         "Update operation failed. Please try again or contact Dev team";
         public static final String MESSAGE_417_DELETE =
                         "Delete operation failed. Please try again or contact Dev team";
+
+        public static final String BAD_REQUEST = "400";
+        public static final String ERR_RQ_VALIDATION = "Request validation failed";
         public static final String STATUS_400 = "400";
         public static final String STATUS_500 = "500";
 }
