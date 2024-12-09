@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dnk.constants.AppConstants;
 import dnk.dtos.commons.BaseResponse;
 import dnk.dtos.requests.RequestCreateAccountDTO;
+import dnk.dtos.requests.RequestLoginAccount;
 import dnk.services.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,20 @@ public class AuthController {
             @Valid @RequestBody RequestCreateAccountDTO requestDTO) {
         try {
             authService.createUser(requestDTO);
+            return ResponseEntity
+                    .ok(BaseResponse.ok(AppConstants.STATUS_201, AppConstants.MESSAGE_201));
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError()
+                    .body(BaseResponse.error(AppConstants.STATUS_500, ex.getMessage()));
+        }
+    }
+
+    @PostMapping(value = "/login")
+    @ApiOperation(value = "", notes = "Create User API")
+    public ResponseEntity<BaseResponse<String>> login(
+            @Valid @RequestBody RequestLoginAccount requestDTO) {
+        try {
+            authService.login(requestDTO);
             return ResponseEntity
                     .ok(BaseResponse.ok(AppConstants.STATUS_201, AppConstants.MESSAGE_201));
         } catch (Exception ex) {
